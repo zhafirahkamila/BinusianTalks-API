@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const multer = require("multer");
 const cors = require("cors");
 require('dotenv').config();
 
@@ -25,6 +26,24 @@ app.use("/api", dataRoutes);
 app.use("/api/user", userRoutes)
 app.use("/api/forum", forumRoutes)
 app.use("/uploads", uploadImage);
+
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      return res.status(400).json({
+        message: "Image size too large. Maximum allowed size is 2MB.",
+      });
+    }
+  }
+
+  if (err) {
+    return res.status(400).json({
+      message: err.message || "Upload failed",
+    });
+  }
+
+  next();
+});
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
