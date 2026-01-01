@@ -130,7 +130,7 @@ router.post("/posts/:id/save", auth, async (req, res) => {
 router.get("/posts/:id/comments", auth, async (req, res) => {
   try {
     const comments = await Comment.find({ postId: req.params.id })
-      .populate("author", "username, profileImage")
+      .populate("author", "username profileImage")
       .sort({ createdAt: 1 });
 
     const formatted = comments.map((c) => ({
