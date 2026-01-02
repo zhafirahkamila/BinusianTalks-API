@@ -8,7 +8,7 @@ const authRoutes = require('./routes/auth');
 const dataRoutes = require("./routes/data");
 const userRoutes = require("./routes/user");
 const forumRoutes = require("./routes/forum")
-const uploadImage = express.static("uploads")
+const path = require("path");
 
 const app = express();
 app.use(cors({
@@ -25,7 +25,8 @@ app.use('/api/auth', authRoutes);
 app.use("/api", dataRoutes);
 app.use("/api/user", userRoutes)
 app.use("/api/forum", forumRoutes)
-app.use("/uploads", uploadImage);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
